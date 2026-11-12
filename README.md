@@ -6,7 +6,7 @@
 
 | Компонент | Рабочие файлы |
 | --- | --- |
-| Инструкции проекта | [AGENTS.md](AGENTS.md), [правила Wiki](Правила%20LLM%20Wiki.md), [хук редактуры](.codex/hooks/wiki-edit.ps1) |
+| Инструкции проекта | [AGENTS.md](AGENTS.md), [правила Wiki](Правила%20LLM%20Wiki.md) |
 | Поиск и обновление Wiki | [wiki-query](.agents/skills/wiki-query/SKILL.md), [wiki-ingest](.agents/skills/wiki-ingest/SKILL.md), [wiki-edit](.agents/skills/wiki-edit/SKILL.md) |
 | Обработка источников из сервисов | [wiki-tracker-ingest](.agents/skills/wiki-tracker-ingest/SKILL.md), [wiki-telegram-ingest](.agents/skills/wiki-telegram-ingest/SKILL.md) |
 | MCP трекера | [схемы инструментов](service/tracker/src/server/mcp/catalog.ts), [HTTP-сервер и вызов API](service/tracker/src/server/mcp/server.ts#L34), [проверка версии и повтора команды на стороне API](service/tracker/src/server/api/wiki.ts#L44), [доставка истории](service/tracker/etc/wiki-sync.ts) |
@@ -19,7 +19,7 @@
 
 ## Что вошло в публикацию
 
-`AGENTS.md`, пять скиллов, хук и MCP взяты из рабочего проекта. В публичной копии заменены локальные пути, адрес развёрнутого трекера и пути к настройкам. [Пример конфига Codex](.codex/config.example.toml) показывает подключения всех трёх MCP. Ключи, Telegram-сессия, база задач, переписка, содержимое Wiki и состояние импорта хранятся вне этого репозитория.
+`AGENTS.md`, пять скиллов и MCP взяты из рабочего проекта. В публичной копии заменены локальные пути, адрес развёрнутого трекера и пути к настройкам. [Пример конфига Codex](.codex/config.example.toml) показывает подключения всех трёх MCP. Ключи, Telegram-сессия, база задач, переписка, содержимое Wiki и состояние импорта хранятся вне этого репозитория.
 
 Для трекера здесь опубликованы MCP, код доставки истории и относящиеся к ним части Wiki API и PostgreSQL. Полное приложение трекера работает отдельно. Telegram-компонент включает приложение и локальный шлюз. Python-код шлюза основан на [chigwell/telegram-mcp](https://github.com/chigwell/telegram-mcp) и опубликован с его лицензией. Мои изменения в шлюзе описаны в [документации Telegram-компонента](service/telegram-wiki/SECURITY.md).
 
