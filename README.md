@@ -9,9 +9,9 @@
 | Инструкции проекта | [AGENTS.md](AGENTS.md), [правила Wiki](Правила%20LLM%20Wiki.md) |
 | Поиск и обновление Wiki | [wiki-query](.agents/skills/wiki-query/SKILL.md), [wiki-ingest](.agents/skills/wiki-ingest/SKILL.md), [wiki-edit](.agents/skills/wiki-edit/SKILL.md) |
 | Обработка источников из сервисов | [wiki-tracker-ingest](.agents/skills/wiki-tracker-ingest/SKILL.md), [wiki-telegram-ingest](.agents/skills/wiki-telegram-ingest/SKILL.md) |
-| MCP трекера | [схемы инструментов](service/tracker/src/server/mcp/catalog.ts), [HTTP-сервер и вызов API](service/tracker/src/server/mcp/server.ts#L34), [проверка версии и повтора команды на стороне API](service/tracker/src/server/api/wiki.ts#L44), [доставка истории](service/tracker/etc/wiki-sync.ts) |
-| MCP Telegram | [сервер и инструменты](service/telegram-wiki/src/server/mcp.ts#L42), [подготовка и отправка](service/telegram-wiki/src/server/operations.ts#L16), [импорт](service/telegram-wiki/src/server/importer.ts#L67), [состояние обработки Wiki](service/telegram-wiki/src/server/processing.ts#L39) |
-| MCP расшифровки | [stdio-сервер](.codex/transcription/server.mjs), [выбор Groq или Deepgram](.codex/transcription/core.mjs#L19) |
+| MCP трекера | [Команды и подключение](service/tracker/WIKI-MCP.md) |
+| MCP Telegram | [Команды и описание](service/telegram-wiki/README.md#инструменты-mcp) |
+| MCP расшифровки | [Команды и подключение](.codex/transcription/README.md) |
 
 Трекер принимает изменение с версией объекта и `operationId`. При конфликте агент заново читает объект. Если ответ потерялся, он повторяет исходный запрос с тем же идентификатором. Сервер проверяет параметры повтора.
 
