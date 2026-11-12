@@ -1,0 +1,25 @@
+node_modules/
+dist/
+temp/
+.runtime/
+.work/
+.local/
+.venv/
+__pycache__/
+*.pyc
+*.log
+.env
+.env.*
+*.pem
+*.key
+*.session*
+**/telegram-credentials.json
+**/telegram-wiki.json
+**/tracker-wiki.json
+/.agents/skills/*/approval.json
+/.codex/config.toml
+/Исходники/
+/wiki/
+/На проверку/
+/Рабочие материалы/
+/.obsidian/

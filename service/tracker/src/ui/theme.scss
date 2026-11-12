@@ -1,0 +1,969 @@
+// Общие примитивы повторяют палитру дизайн-прототипа; данные и поведение остаются в экранах.
+$sans:
+  "Segoe UI",
+  system-ui,
+  -apple-system,
+  sans-serif;
+$mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+$bg: #101217;
+$surface-1: #181b23;
+$surface-2: #1d212b;
+$control: #252a37;
+$control-hover: #303644;
+$line: #303644;
+$line-thin: #292e3a;
+$tooltip: #41485b;
+$ink: #f0f1f6;
+$muted: #a3a9b9;
+$tertiary: #858da1;
+$accent: #b7a7ff;
+$accent-2: #28243f;
+$accent-on: #18132b;
+$accent-stroke: #b7a7ff66;
+$accent-overlay: #b7a7ff26;
+$accent-surface: #b7a7ff0d;
+$ok: #9bd7b8;
+$warn: #ebc186;
+$danger: #f2949b;
+$ok-bg: #9bd7b826;
+$warn-bg: #ebc18626;
+$danger-bg: #f2949b26;
+$r-xs: 8px;
+$r-check: 6px;
+$r: 14px;
+
+// ─── Плавность ─────────────────────────────────────────────────────────────────
+$fast: 0.1s ease; // hover и прочий микроинтерактив
+$slow: 0.3s ease; // панели и раскрытия
+
+$bp-mobile: 860px;
+
+@mixin mobile {
+  @media (max-width: $bp-mobile) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: ($bp-mobile + 1px)) {
+    @content;
+  }
+}
+
+// ─── Типографика ───────────────────────────────────────────────────────────────
+
+@mixin caption {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+@mixin body-s {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+@mixin body {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin body-lg {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+// Базовая строка задачи: те же 14px, но разрежённее — список читается длинными сессиями.
+@mixin task-text {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+@mixin h3 {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+@mixin h2 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+@mixin h1 {
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+@mixin section-title {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $tertiary;
+}
+
+@mixin label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: $muted;
+}
+
+@mixin numeric {
+  font-family: $mono;
+  font-size: 12px;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+// ─── Границы ───────────────────────────────────────────────────────────────────
+
+// Граница внутренней тенью, а не `border`: не занимает место в layout, поэтому появление
+// границы на hover/фокусе не дёргает содержимое на пиксель.
+@mixin edge($color: $line) {
+  box-shadow: inset 0 0 0 1px $color;
+}
+
+@mixin focus-edge {
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 1px $accent-stroke;
+  }
+}
+
+// ─── Поверхности ───────────────────────────────────────────────────────────────
+
+@mixin card {
+  background: $surface-2;
+  border-radius: $r;
+
+  @include edge;
+}
+
+@mixin panel {
+  background: $surface-1;
+  border-radius: $r;
+
+  @include edge($line-thin);
+}
+
+// Единственное место, где тень настоящая: всплывающий слой обязан читаться над контентом.
+@mixin popover {
+  background: $surface-2;
+  border-radius: $r;
+  box-shadow:
+    inset 0 0 0 1px $line,
+    0 6px 14px rgb(0 0 0 / 40%);
+}
+
+// Модальный слой: та же единственная законная тень, что у поповера, но на поверхности
+// панели — окно настроек держит внутри собственные карточки, и `surface-2` под ними съел бы
+// ступень глубины.
+@mixin dialog {
+  background: $surface-1;
+  border-radius: $r;
+  box-shadow:
+    inset 0 0 0 1px $line,
+    0 6px 14px rgb(0 0 0 / 40%);
+}
+
+// ─── Строки списка ─────────────────────────────────────────────────────────────
+
+// Задача — строка, а не карточка. Подсветка растянута на 4px влево за текст, чтобы
+// зона наведения выглядела шире колонки и не липла к букве.
+@mixin row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 -6px;
+  padding: 4px 6px;
+  border-radius: $r-xs;
+  transition: background $fast;
+
+  &:hover {
+    background: $accent-surface;
+  }
+}
+
+// ─── Поля ──────────────────────────────────────────────────────────────────────
+
+@mixin field {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: none;
+  border-radius: $r-xs;
+  background: $control;
+  color: $ink;
+  font-family: $sans;
+  transition:
+    background $fast,
+    box-shadow $fast;
+
+  @include body;
+  @include edge($line);
+
+  // На телефоне поле не может быть мельче 16px: iOS Safari при фокусе в поле меньшего
+  // размера увеличивает вьюпорт и обратно его не возвращает — «вёрстка поехала» именно
+  // отсюда. Плотность это не съедает: на узком экране поля и так во всю ширину и по одному
+  // в ряд, а самая плотная строка интерфейса — задача в списке — полем на телефоне не
+  // является вовсе.
+  @include mobile {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  &::placeholder {
+    color: $tertiary;
+  }
+
+  &:focus {
+    outline: none;
+    background: $control-hover;
+    box-shadow: inset 0 0 0 1px $accent-stroke;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:hover:not(:disabled) {
+    background: $control-hover;
+  }
+}
+
+@mixin textarea {
+  @include field;
+
+  resize: vertical;
+  min-height: 84px;
+  line-height: 22px;
+}
+
+// Нативный `select` в тёмной теме: стрелка своя, потому что системная не красится.
+@mixin select {
+  @include field;
+
+  appearance: none;
+  padding-right: 26px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23959db1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
+
+  option {
+    background: $surface-2;
+    color: $ink;
+  }
+}
+
+// Поле-кнопка: выглядит как `field`, но открывает свой поповер. Нативные `input[type=date]`
+// и `input[type=time]` рисует браузер — чужая иконка, чужой шрифт и светлый попап на тёмной
+// теме, — поэтому дата и время в системе собраны на этом примитиве, а не на них.
+@mixin field-trigger {
+  @include field;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+
+  @include focus-edge;
+}
+
+// Значение внутри поля-кнопки: моноширинное, чтобы дата не прыгала от цифры к цифре.
+@mixin field-value {
+  flex: 1;
+  min-width: 0;
+  font-family: $mono;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ─── Кнопки ────────────────────────────────────────────────────────────────────
+
+@mixin button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: $r;
+  font-family: $sans;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background $fast,
+    color $fast,
+    box-shadow $fast,
+    opacity $fast;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.45;
+  }
+}
+
+@mixin button-primary {
+  @include button;
+
+  background: $accent;
+  color: $accent-on;
+
+  // Выключенная главная кнопка не должна оставаться ярким пятном: на тёмном фоне даже
+  // приглушённая прозрачностью заливка продолжает звать нажать себя.
+  &:disabled {
+    background: $control;
+    color: $tertiary;
+    opacity: 1;
+
+    @include edge($line);
+  }
+
+  &:hover:not(:disabled) {
+    background: #c6b9ff;
+  }
+}
+
+@mixin button-secondary {
+  @include button;
+
+  background: $control;
+  color: $ink;
+
+  @include edge($line);
+
+  &:hover:not(:disabled) {
+    background: $control-hover;
+  }
+
+  @media (hover: none) {
+    &:active:not(:disabled) {
+      background: $control-hover;
+    }
+  }
+}
+
+@mixin button-ghost {
+  @include button;
+
+  padding: 6px 10px;
+  background: transparent;
+  color: $muted;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background: $accent-surface;
+    color: $ink;
+  }
+
+  @media (hover: none) {
+    &:active:not(:disabled) {
+      background: $accent-surface;
+      color: $ink;
+    }
+  }
+}
+
+@mixin button-danger {
+  @include button;
+
+  background: transparent;
+  color: $danger;
+
+  @include edge($danger-bg);
+
+  &:hover:not(:disabled) {
+    background: $danger-bg;
+  }
+}
+
+// Квадратная кнопка-иконка. Проявляется на hover строки — в покое список остаётся тихим.
+@mixin icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  padding: 0;
+  border: none;
+  border-radius: $r-xs;
+  background: transparent;
+  color: $tertiary;
+  cursor: pointer;
+  transition:
+    background $fast,
+    color $fast;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+
+  &:hover:not(:disabled) {
+    background: $control-hover;
+    color: $ink;
+  }
+
+  // Браузерная вспышка при тапе погашена в `global.scss` — отклик даём свой.
+  @media (hover: none) {
+    &:active:not(:disabled) {
+      background: $control-hover;
+      color: $ink;
+    }
+  }
+}
+
+// ─── Чипы ──────────────────────────────────────────────────────────────────────
+
+@mixin chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: $r-xs;
+  background: $accent-overlay;
+  color: $accent;
+  white-space: nowrap;
+
+  @include caption;
+  @include edge($accent-stroke);
+}
+
+@mixin chip-off {
+  @include chip;
+
+  background: $accent-surface;
+  color: $muted;
+  box-shadow: none;
+}
+
+// ─── Прочее ────────────────────────────────────────────────────────────────────
+
+@mixin scroll {
+  scrollbar-width: thin;
+  scrollbar-color: $line transparent;
+}
+
+@mixin backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(4 8 20 / 66%);
+}
+
+// ─── Текст, который и есть поле ────────────────────────────────────────────────
+
+// Отдельной формы переименования в системе нет: название правится там, где написано.
+// Поэтому поле в покое обязано быть неотличимо от текста — отрицательный внешний отступ
+// гасит внутренний, и буквы стоят ровно там, где стояли бы у обычного абзаца. Граница
+// рисуется inset-контуром, так что переход к правке не двигает раскладку ни на пиксель.
+// Размер шрифта и вес поле не задаёт — их приносит место, где текст живёт: строка списка,
+// заголовок карточки, запись лога.
+@mixin inline-field {
+  width: 100%;
+  min-width: 0;
+  padding: 2px 6px;
+  margin: 0 -6px;
+  border: none;
+  border-radius: $r-xs;
+  background: transparent;
+  color: $ink;
+  font-family: $sans;
+  resize: none;
+  overflow: hidden;
+  transition:
+    background $fast,
+    box-shadow $fast;
+
+  &::placeholder {
+    color: $tertiary;
+  }
+
+  // Контур под курсором — единственный намёк, что текст правится. У поля, которое сейчас
+  // не правится, намёка нет: оно притворяется текстом до конца.
+  &:hover:not(:read-only) {
+    @include edge($line-thin);
+  }
+
+  // `:not(:read-only)` здесь не только по смыслу, но и ради веса селектора: без него
+  // hover-контур перебивал бы фокус, когда курсор остаётся над полем.
+  &:focus:not(:read-only) {
+    outline: none;
+    background: $control-hover;
+    box-shadow: inset 0 0 0 1px $accent-stroke;
+  }
+}
+
+// ─── Сегментированный переключатель ────────────────────────────────────────────
+
+// Ряд взаимоисключающих кнопок: статус задачи, день плана. Включена ровно одна, и
+// обведена она акцентом — тем же, чем в системе обозначено «сейчас выбрано».
+@mixin segmented {
+  display: flex;
+  gap: 4px;
+}
+
+@mixin segment {
+  @include button;
+
+  flex: 1;
+  padding: 6px 4px;
+  background: $control;
+  color: $muted;
+  font-size: 12px;
+  font-weight: 500;
+
+  &:hover {
+    background: $control-hover;
+    color: $ink;
+  }
+
+  &._on {
+    background: $accent-overlay;
+    color: $accent;
+    font-weight: 600;
+
+    @include edge($accent-stroke);
+  }
+}
+
+// ─── Всплывающее меню ──────────────────────────────────────────────────────────
+
+// Меню «⋯» у выпуска, вывода и строки хранилища. Поверхность — `popover`, единственная
+// законная тень; пункты — строки, а не кнопки: подсветка та же, что у строки списка.
+@mixin menu {
+  @include popover;
+
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 4px;
+}
+
+@mixin menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  border-radius: $r-xs;
+  background: transparent;
+  color: $ink;
+  font-family: $sans;
+  text-align: left;
+  cursor: pointer;
+  transition: background $fast;
+
+  @include body-s;
+
+  // Пункт меню под пальцем — 40px: меню на телефоне открывают долгим нажатием, и промах
+  // по соседнему «Удалить» стоил бы дороже лишней высоты.
+  @include mobile {
+    padding: 10px 12px;
+
+    @include body;
+  }
+
+  &:disabled {
+    color: $tertiary;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: none;
+    background: $accent-surface;
+  }
+
+  &:hover:not(:disabled) {
+    background: $accent-surface;
+  }
+
+  @media (hover: none) {
+    &:active:not(:disabled) {
+      background: $accent-surface;
+    }
+  }
+}
+
+// ─── Слушать: обложка ──────────────────────────────────────────────────────────
+
+// Обложка выпуска — всегда квадрат: у видео с YouTube картинка 16:9, у подкаста 1:1, и
+// строка библиотеки с разной шириной обложек перестала бы держать колонку текста. Картинка
+// обрезается `object-fit: cover` по центру. Радиус растёт вместе с размером, но выше 8px не
+// поднимается: 4px у строки, 8px у обложки плеера.
+// Контур рисуется поверх картинки псевдоэлементом: inset-тень контейнера легла бы под `img`,
+// а без контура тёмная обложка сливается с фоном «Космоса» в пятно без края.
+// Без картинки внутри лежит `IconCover` третичным на `control` — размер глифа по умолчанию
+// чуть меньше половины стороны.
+@mixin cover($size, $glyph: $size * 0.42) {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: $size;
+  height: $size;
+  overflow: hidden;
+  border-radius: $r-xs;
+  background: $control;
+  color: $tertiary;
+  font-size: $glyph;
+
+  @if $size >= 96px {
+    border-radius: $r;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px $line;
+    pointer-events: none;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ─── Слушать: полоса прогресса ─────────────────────────────────────────────────
+
+// Тонкая полоса «сколько прослушано». Дорожка — линия, заполнение — дочерний элемент с
+// шириной в процентах: градиент с жёсткой границей дал бы то же одним элементом, но
+// градиенты в системе запрещены целиком, без исключений «на один стоп».
+// Цвет заполнения — параметр намеренно. В строке библиотеки он приглушённый: двадцать синих
+// полос подряд растворили бы акцент. Акцентом полоса красится только у выпуска «сейчас» —
+// в карточке «Продолжить».
+@mixin meter($height: 2px) {
+  position: relative;
+  display: block;
+  height: $height;
+  overflow: hidden;
+  border-radius: $height;
+  background: $line;
+}
+
+@mixin meter-fill($color: $muted) {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: $color;
+}
+
+// ─── Слушать: ползунок позиции ─────────────────────────────────────────────────
+
+// Ползунок — контейнер во всю ширину колонки. Сама дорожка тонкая, а зона нажатия высокая
+// (48px на телефоне — нижняя граница из ТЗ, 32px под мышью): попадать приходится по полосе в
+// 4px, и тянут её большим пальцем. Прибавку высоты не видно: дорожка центрирована внутри.
+// `touch-action: none` — горизонтальный протяг принадлежит перемотке, а не прокрутке экрана.
+@mixin scrubber {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+
+  @include mobile {
+    height: 48px;
+  }
+}
+
+// Дорожка утолщается, пока ползунок держат (`._dragging` на контейнере ставит компонент):
+// палец закрывает полосу, и лишние 2px — единственный отклик, который видно из-под него.
+@mixin scrubber-track {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: $line;
+  transition: height $fast;
+}
+
+// Слой дорожки: `left` и `width` в процентах задаёт компонент. Слоёв три, снизу вверх:
+// «уже на устройстве» (`$tertiary` — светлее дорожки, но заметно тусклее прослушанного, как
+// буфер у YouTube; кусков может быть несколько, докачка идёт не подряд), затем прослушанное
+// (`$accent`). Буфер обязан читаться: без сети по нему решают, докуда хватит.
+@mixin scrubber-layer($color) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: $color;
+}
+
+// Бегунок — вертикальная черта, а не круг. Черта указывает точку: на трёхчасовом выпуске
+// минута — это доля пикселя, и круг в 14px закрывал бы то место, куда метят. Круг к тому же
+// в системе занят маркером выбора планирования. Белый, а не акцентный: он стоит на стыке
+// акцентного прослушанного и серого буфера и должен читаться на обоих.
+@mixin scrubber-thumb {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 16px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: $ink;
+  transform: translateY(-50%);
+  transition: height $fast;
+  pointer-events: none;
+}
+
+// Подпись времени над бегунком во время перетаскивания. Крупная и моноширинная: перемотка
+// случается на отпускании, и до него человек целится по этим цифрам, а не по полосе. Это
+// всплывающий слой — значит, законная тень `popover`. На телефоне компонент поднимает её на
+// 56px над дорожкой, чтобы подпись не пряталась под пальцем.
+@mixin scrub-bubble {
+  @include popover;
+
+  position: absolute;
+  bottom: calc(100% + 8px);
+  padding: 4px 10px;
+  color: $ink;
+  font-family: $mono;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+// ─── Слушать: кнопки плеера ────────────────────────────────────────────────────
+
+// Главная кнопка ▶/⏸ — единственная акцентная заливка на экране плеера и в карточке
+// «Продолжить». Квадрат с радиусом 8px, а не круг: круглых кнопок в системе нет, а радиус
+// выше 8px превратил бы инструмент в «дружелюбное приложение». Иконка внутри контурная,
+// заливку несёт кнопка — правило «иконки без заливки» не нарушается.
+@mixin play-button($size: 64px) {
+  @include button-primary;
+
+  width: $size;
+  height: $size;
+  flex: none;
+  padding: 0;
+  font-size: $size * 0.44;
+
+  // Своя вспышка нажатия: браузерная погашена в `global.scss`, а у `button-primary` отклика
+  // на касание нет — там кнопки нажимают мышью.
+  @media (hover: none) {
+    &:active:not(:disabled) {
+      background: #c6b9ff;
+    }
+  }
+}
+
+// −15 и +15: крупные, но тихие. Без подложки в покое — рядом с акцентной главной кнопкой
+// любая заливка сделала бы из тройки ряд одинаково громких кнопок.
+@mixin skip-button($size: 48px) {
+  @include icon-button;
+
+  width: $size;
+  height: $size;
+  border-radius: $r;
+  color: $muted;
+  font-size: $size * 0.54;
+}
+
+// ─── Слушать: фильтры ──────────────────────────────────────────────────────────
+
+// Чип фильтра библиотеки. Выбор один, как у `segment`, но выглядит иначе намеренно: на экране
+// уже есть сегментированный «Библиотека · Выводы», и второй такой же ряд прочитался бы
+// вторым уровнем того же переключателя. Поэтому здесь — контур без заливки в покое и зазор
+// 6px вместо склеенных блоков; включённый обведён акцентом, как всё «сейчас выбранное».
+@mixin filter-chip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: $r-xs;
+  background: transparent;
+  color: $muted;
+  font-family: $sans;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background $fast,
+    color $fast,
+    box-shadow $fast;
+
+  @include body-s;
+  @include edge($line);
+  @include focus-edge;
+
+  @include mobile {
+    height: 36px;
+  }
+
+  &:hover {
+    background: $accent-surface;
+    color: $ink;
+  }
+
+  &._on {
+    background: $accent-overlay;
+    color: $accent;
+    font-weight: 600;
+
+    @include edge($accent-stroke);
+  }
+}
+
+// Горизонтальная лента, выходящая за поля колонки: ряд чипов на телефоне не переносится, а
+// прокручивается. Отрицательные поля гасят внутренние — первый чип стоит на вертикали текста,
+// а при прокрутке содержимое уходит до самой кромки экрана. Маски-градиента на краях нет
+// (градиенты запрещены): о продолжении говорит сам обрезанный последний чип.
+@mixin hscroll($gutter: 14px) {
+  display: flex;
+  gap: 6px;
+  margin: 0 (-$gutter);
+  padding: 0 $gutter;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding: 0 $gutter;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ─── Слушать: плашки и тост ────────────────────────────────────────────────────
+
+// Плашка состояния над ползунком или над разделом: «Играет на другом устройстве», «Дальше
+// не скачано». Язык тот же, что у переходящих задач в проекте: подложка плюс рельс 2px слева.
+// Нейтральная — `surface-1` с рельсом линией; предупреждение — `warn-bg` с рельсом `warn`.
+// Не карточка и не тост: она живёт в потоке и уходит, когда состояние кончилось.
+@mixin banner($rail: $line, $fill: $surface-1) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 8px 8px 8px 12px;
+  border-radius: $r;
+  background: $fill;
+  box-shadow: inset 2px 0 0 $rail;
+  color: $ink;
+
+  @include body-s;
+}
+
+// Тост с отменой: «Отмечено прослушанным · Отменить». Всплывающий слой — значит, тень
+// `popover`; контур нейтральный, а не `danger-bg`, как у плашки сбоя в `Shell`: это не ошибка.
+@mixin toast {
+  @include popover;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 380px;
+  padding: 8px 8px 8px 12px;
+  color: $ink;
+
+  @include body-s;
+}
+
+// ─── Слушать: таймкод ──────────────────────────────────────────────────────────
+
+// Таймкод вывода — чип-кнопка: нажатие перематывает плеер. Моноширинный, чтобы «9:05» и
+// «1:24:10» в ленте стояли ровно. Выключенный (аудио выпуска удалено) теряет акцент и курсор,
+// но остаётся на месте: таймкод — часть смысла вывода, даже если перемотать уже некуда.
+@mixin timecode {
+  @include chip;
+
+  border: none;
+  font-family: $mono;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background $fast;
+
+  &:disabled {
+    background: $accent-surface;
+    color: $muted;
+    box-shadow: none;
+    cursor: default;
+  }
+
+  &:hover:not(:disabled) {
+    background: $accent-stroke;
+  }
+}
+
+// ─── Слушать: индикатор воспроизведения ────────────────────────────────────────
+
+// Три полоски эквалайзера — «сейчас играет» на вкладке и в строке играющего выпуска.
+// Движение спокойное: полторы секунды на цикл, амплитуда от трети до полной высоты, без
+// свечения и смены цвета. Акцентом — потому что это то же «сейчас», что и активный раздел,
+// а не новый цвет. При `prefers-reduced-motion` полоски замирают на разной высоте: знак
+// остаётся узнаваемым и без движения. Детей-полосок три, их разметку приносит компонент.
+@mixin playing-bars($height: 10px) {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: none;
+  height: $height;
+
+  > * {
+    width: 2px;
+    height: 100%;
+    border-radius: 1px;
+    background: $accent;
+    transform-origin: bottom;
+    animation: playing-bar 1.5s ease-in-out infinite;
+  }
+
+  > :nth-child(2) {
+    animation-delay: -0.5s;
+  }
+
+  > :nth-child(3) {
+    animation-delay: -1s;
+  }
+
+  @keyframes playing-bar {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    > * {
+      animation: none;
+    }
+
+    > :nth-child(1) {
+      transform: scaleY(0.5);
+    }
+
+    > :nth-child(3) {
+      transform: scaleY(0.7);
+    }
+  }
+}

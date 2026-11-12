@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoLogo -NoProfile -NonInteractive -File \".codex/hooks/wiki-edit.ps1\"",
+            "timeout": 10,
+            "additionalContextLimit": 16000,
+            "statusMessage": "Подключаю редактуру перед выдачей"
+          }
+        ]
+      }
+    ]
+  }
+}

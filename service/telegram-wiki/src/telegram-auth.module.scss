@@ -1,0 +1,99 @@
+@use "../../tracker/src/ui/theme" as t;
+
+.authButton {
+  @include t.button-secondary;
+
+  > span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: t.$warn;
+  }
+
+  &.connected > span {
+    background: t.$ok;
+  }
+}
+
+.backdrop {
+  @include t.backdrop;
+
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.dialog {
+  width: min(480px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 24px;
+
+  @include t.dialog;
+
+  h2 {
+    margin: 0;
+
+    @include t.h2;
+  }
+}
+
+.lead {
+  color: t.$muted;
+}
+
+.qrFrame {
+  padding: 12px;
+  margin: 0 auto;
+  width: min(260px, 100%);
+  border-radius: t.$r-xs;
+  background: white;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.waiting {
+  color: t.$muted;
+}
+
+.loader {
+  display: none;
+}
+
+.password,
+.password label {
+  display: grid;
+  gap: 8px;
+}
+
+.password label {
+  @include t.label;
+}
+
+.password input {
+  @include t.field;
+}
+
+.primary {
+  @include t.button-primary;
+}
+
+.error {
+  color: t.$danger;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+
+  button:not(.primary) {
+    @include t.button-secondary;
+  }
+}

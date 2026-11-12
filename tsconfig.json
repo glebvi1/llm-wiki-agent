@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+
+    "target": "ESNext",
+    "module": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+
+    "allowJs": false,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "exclude": ["**/dist", "**/build", "**/public", "**/temp", "**/release"]
+}

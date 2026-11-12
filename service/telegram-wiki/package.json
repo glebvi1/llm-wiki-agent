@@ -1,0 +1,47 @@
+{
+  "name": "telegram-wiki",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Локальная интеграция Telegram с LLM Wiki и Codex",
+  "license": "Proprietary",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "imports": {
+    "#etc/*": "./etc/*",
+    "#src/*": "./src/*",
+    "#package.json": "./package.json"
+  },
+  "scripts": {
+    "dev": "vite --config etc/vite.config.ts",
+    "build": "vite --config etc/vite.config.ts build",
+    "preview": "vite --config etc/vite.config.ts preview",
+    "server": "node --experimental-transform-types src/server/index.ts",
+    "server:dev": "node --experimental-transform-types --watch src/server/index.ts",
+    "start": "node --experimental-transform-types etc/start.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json",
+    "setup": "node --experimental-transform-types etc/setup.ts",
+    "login": "node --experimental-transform-types etc/login.ts",
+    "telegram": "node --experimental-transform-types etc/telegram.ts"
+  },
+  "dependencies": {
+    "@fastify/static": "^10.1.1",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "electron": "^43.2.0",
+    "fastify": "^5.12.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "esbuild": "0.28.2",
+    "sass": "^1.108.1",
+    "vite": "8.2.6",
+    "vitest": "^4.1.12"
+  }
+}

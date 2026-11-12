@@ -1,0 +1,22 @@
+mcp_optional_startup_grace_ms = 0
+
+[mcp_servers.transcription]
+startup_timeout_sec = 30
+tool_timeout_sec = 1500
+default_tools_approval_mode = "auto"
+command = "node"
+args = ["D:/WikiAgent/.codex/transcription/server.mjs"]
+
+[mcp_servers.tracker]
+startup_timeout_sec = 30
+tool_timeout_sec = 180
+default_tools_approval_mode = "auto"
+url = "https://tracker.example.com/api/mcp"
+http_headers_helper = "node \"D:/WikiAgent/service/tracker/etc/mcp-headers.ts\""
+
+[mcp_servers.telegram]
+startup_timeout_sec = 30
+tool_timeout_sec = 180
+default_tools_approval_mode = "auto"
+url = "http://127.0.0.1:7100/api/mcp"
+http_headers_helper = "node \"D:/WikiAgent/service/telegram-wiki/src/server/mcp-headers.ts\""

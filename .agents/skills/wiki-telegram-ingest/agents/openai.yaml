@@ -1,0 +1,3 @@
+interface:
+  display_name: "Обновить вики из Telegram"
+  short_description: "Вносит решения из переписки и пересматривает выводы"

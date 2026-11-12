@@ -1,0 +1,7 @@
+packages:
+  - service/tracker
+  - service/telegram-wiki
+allowBuilds:
+  '@parcel/watcher': true
+  electron: true
+  esbuild: true

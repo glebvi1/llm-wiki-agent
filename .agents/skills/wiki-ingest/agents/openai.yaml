@@ -1,0 +1,3 @@
+interface:
+  display_name: "Собрать вики из источников"
+  short_description: "Разбирает материалы и готовит изменения LLM Wiki"

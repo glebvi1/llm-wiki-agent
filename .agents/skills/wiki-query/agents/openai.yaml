@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ответить по вики"
+  short_description: "Отвечает по вики и создаёт рабочие документы"
